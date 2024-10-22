@@ -1,30 +1,14 @@
-import java.util.Random;
-
-
 public class InputDevice {
-    private Random random;
 
-    public InputDevice() {
-        random = new Random();
+    // ----for testing account generation----
+    public User createMockUser() {
+        return new User("mockuser@example.com");
     }
 
-    public String getType() {
-        return "random";
-    }
+    public Account[] createMockAccounts() {
+        Account account1 = new Account("google.com", "mockuser", "mockpassword123");
+        Account account2 = new Account("facebook.com", "mockuser.fb", "mockpass456");
 
-    public int nextInt() {
-        return random.nextInt(100) + 1;
-    }
-
-    public int[] getNumbers(int N){
-        int[] numbers = new int[N];
-        for(int i = 0; i < N; i++){
-            numbers[i] = nextInt();
-        }
-        return numbers;
-    }
-
-    public String getLine() {
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        return new Account[] {account1, account2};
     }
 }
