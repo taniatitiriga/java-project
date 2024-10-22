@@ -1,6 +1,6 @@
 public class InputDevice {
 
-    // ----for testing account generation----
+    // ----input methods for testing----
     public User createMockUser() {
         return new User("mockuser@example.com");
     }
