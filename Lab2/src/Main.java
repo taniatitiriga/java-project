@@ -4,10 +4,16 @@ public class Main {
         OutputDevice outputDevice = new OutputDevice();
 
         if (args.length > 0) {
-            if (args[0].equals("testUserGeneration")) {
-                Application.test();
-            } else {
-                outputDevice.writeMessage("Unknown command: " + args[0]);
+            for (String arg : args) {
+                if (arg.equals("testInitializeMockUser")) {
+                    Application.testInitializeMockUser();
+                }
+                else if (arg.equals("testAppendMockAccount")) {
+                    Application.testAppendMockAccount();
+                }
+                else {
+                    outputDevice.writeMessage("Unknown command: " + arg);
+                }
             }
         } else {
             outputDevice.writeMessage("No arguments provided. Use 'testUserGeneration' to run the test.");
