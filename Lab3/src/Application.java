@@ -1,33 +1,41 @@
+import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
 public class Application {
+    private Agenda agenda;
+    private Elevator elevator;
 
-    // ----test user generation process----
-    public static void testInitializeMockUser() {
-        OutputDevice outputDevice = new OutputDevice();
-        InputDevice inputDevice = new InputDevice();
-
-        User mockUser = inputDevice.createMockUser();
-
-        Account[] mockAccounts = inputDevice.createMockAccounts();
-        PasswordManager mockPasswordManager = new PasswordManager(mockUser, mockAccounts);
-
-        outputDevice.writeMessage("User: " + mockPasswordManager.getUser().getUsername());
-        outputDevice.printAllAccounts(mockPasswordManager.getAccounts());
+    public Application() {
+        agenda = new Agenda(new LinkedList<>(), new HashMap<>());
     }
 
-    // ----test account appending process----
-    public static void testAppendMockAccount() {
-        OutputDevice outputDevice = new OutputDevice();
-        InputDevice inputDevice = new InputDevice();
+    public void addElevator(int maxWeight, int width, int depth, int[] floors, int currentFloor) {
+        elevator = new Elevator(IDGenerator.generateElevatorID(), maxWeight, width, depth, floors, currentFloor);
+        OutputDevice.print("Elevator created: " + elevator.getCurrentFloor());
+    }
 
-        User mockUser = inputDevice.createMockUser();
-        Account[] mockAccounts = inputDevice.createMockAccounts();
-        PasswordManager mockPasswordManager = new PasswordManager(mockUser, mockAccounts);
-
-        Account newAccount = new Account("instagram.com", "mockuser.insta", "mockinstapass");
-        mockPasswordManager.addAccount(newAccount);
-
-        Account[] updatedAccounts = mockPasswordManager.getAccounts();
-        outputDevice.writeMessage("Newly added account from PasswordManager:");
-        outputDevice.printAccount(updatedAccounts[updatedAccounts.length - 1]);
+    public void addPerson(String type, int weight, int height, int destinationFloor) {
+        Person person;
+        switch (type) {
+            case "Patient":
+                person = new Patient(weight, height);
+                break;
+            case "Visitor":
+                person = new Visitor(weight, height);
+                break;
+            case "Nurse":
+                person = new Nurse(weight, height);
+                break;
+            case "Doctor":
+                person = new Doctor(weight, height);
+                break;
+            default:
+                OutputDevice.print("Unknown person type: " + type);
+                return;
+        }
+        agenda.addPersonToQueue(person, elevator.getCurrentFloor(), destinationFloor);
+        OutputDevice.print("Added " + type + " to queue with ID: " + person.getPriorityLevel());
     }
 }

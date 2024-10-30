@@ -1,14 +1,12 @@
 public class InputDevice {
-
-    // ----input methods for testing----
-    public User createMockUser() {
-        return new User("mockuser@example.com");
+    public static int getIntInput(String prompt) {
+        OutputDevice.print(prompt);
+        return (int) (Math.random() * 100); // Mock random value for testing
     }
 
-    public Account[] createMockAccounts() {
-        Account account1 = new Account("google.com", "mockuser", "mockpassword123");
-        Account account2 = new Account("facebook.com", "mockuser.fb", "mockpass456");
-
-        return new Account[] {account1, account2};
+    public static String getStringInput(String prompt) {
+        OutputDevice.print(prompt);
+        String[] options = {"Patient", "Visitor", "Nurse", "Doctor"};
+        return options[(int) (Math.random() * options.length)]; // Random type for testing
     }
 }

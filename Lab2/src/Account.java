@@ -1,9 +1,9 @@
 public class Account {
     private String domain;
     private String accountUsername;
-    private String password;
+    private Password password;
 
-    public Account(String domain, String accountUsername, String password) {
+    public Account(String domain, String accountUsername, Password password) {
         this.domain = domain;
         this.accountUsername = accountUsername;
         this.password = password;
@@ -25,11 +25,12 @@ public class Account {
         this.accountUsername = accountUsername;
     }
 
+    //class for pass 1FA or 2FA, generate
     public String getPassword() {
-        return password;
+        return password.getPassword();
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String newPassword) {
+        this.password.setPassword(newPassword);
     }
 }
