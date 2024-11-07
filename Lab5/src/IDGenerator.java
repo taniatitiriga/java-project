@@ -1,7 +1,7 @@
 public class IDGenerator {
 
     private static int elevatorCount = 1;
-    private static int personCount = 1;
+    private static int patientCount = 1;
     private static int visitorCount = 1;
     private static int nurseCount = 1;
     private static int doctorCount = 1;
@@ -11,7 +11,7 @@ public class IDGenerator {
     }
 
     public static String generatePatientID() {
-        return String.format("P%04d", personCount++);
+        return String.format("P%04d", patientCount++);
     }
 
     public static String generateVisitorID() {

@@ -4,7 +4,7 @@ public class Nurse extends Person{
 
     public Nurse(int weight, int height) {
         super(IDGenerator.generateNurseID(), weight, height);
-        this.emergencyLevel = 1;
+        this.emergencyLevel = 1;//default no emergency
     }
 
     @Override
