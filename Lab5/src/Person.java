@@ -9,7 +9,7 @@ public abstract class Person implements Surface {
     private int destinationFloor;
 
     public Person(String ID,int weight, int height) {
-        this.ID = null;
+        this.ID = "0";
         this.weight = weight;
         this.height = height;
     }
