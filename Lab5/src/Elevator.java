@@ -23,6 +23,10 @@ public class Elevator implements Surface{
         return width * depth;
     }
 
+    public double getMaxWeight() {
+        return maxWeight;
+    }
+
     public void moveUp() {
         if (currentFloor < floors.length - 1) {
             currentFloor++;

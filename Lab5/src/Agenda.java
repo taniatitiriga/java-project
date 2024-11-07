@@ -12,6 +12,7 @@ public class Agenda {
     private Map<Integer, Queue<Person>> queuesByFloor;
 
     public Agenda(Elevator elevator, Queue<Person> queueInside, Map<Integer, Queue<Person>> queuesByFloor) {
+        //an agenda handles a single elevator, and the respective queues
         this.elevator = elevator;
         this.queueInside = queueInside;
         this.queuesByFloor = queuesByFloor;
@@ -20,16 +21,21 @@ public class Agenda {
     public void addPersonToQueue(Person person, int floor, int destinationFloor) {
         //assign destination
         person.setDestinationFloor(destinationFloor);
+
+        //initialize floor queue if necessary
         queuesByFloor.computeIfAbsent(floor, k -> new LinkedList<>()).add(person);
+
         //sort queue by priority
         sortAndGroup();
     }
 
     public Comparator<Person> comparePriority() {
+        //compare by priority (bigger priority comes first)
         return Comparator.comparingInt(Person::getPriorityLevel).reversed();
     }
 
     public Person getNextPerson() {
+        // get next person inside elevator by priority
         if (!queueInside.isEmpty()) {
             List<Person> sortedList = new ArrayList<>(queueInside);
             sortedList.sort(comparePriority());
@@ -40,11 +46,14 @@ public class Agenda {
 
 
     public void boardPassengers(Elevator elevator, int floor) {
+        //nobody to board
         Queue<Person> floorQueue = queuesByFloor.get(floor);
         if (floorQueue == null || floorQueue.isEmpty()) return;
 
         while (!floorQueue.isEmpty() && !elevator.isFull()) {
             Person person = floorQueue.peek();
+
+            //TO IMPLEMENT: weight and surface check
             int personWeight = person instanceof Patient ? ((Patient) person).getTotalWeight() : person.getWeight();
 
             if (elevator.getAvailableSpace() >= personWeight) {
@@ -57,14 +66,17 @@ public class Agenda {
     }
 
     public int determineNextDestination(Elevator elevator) {
-        if (queueInside.isEmpty()) return elevator.getCurrentFloor(); // No destination if no passengers
+        // no destination if no passengers
+        if (queueInside.isEmpty()) return elevator.getCurrentFloor();
 
         Person topPriorityPerson = queueInside.peek();
         int destination = topPriorityPerson.getDestinationFloor();
 
         if (topPriorityPerson.getPriorityLevel() >= 6) {
+            //if doctor or nurse with lvl. 3 emergency, go straight there
             return destination;
         } else {
+            //otherwise have stops on the way
             return getNextIntermediateStop(elevator.getCurrentFloor(), destination);
         }
     }
@@ -105,8 +117,15 @@ public class Agenda {
         return Math.max(0, elevator.getSurface() - usedSpace);
     }
 
+    public int getAvailableWeight() {
+        int usedWeight = queueInside.stream()
+                .mapToInt(person -> (int) Math.ceil(person.getWeight()))
+                .sum();
+        return Math.max(0, elevator.getMaxWeight() - usedWeight);
+    }
+
     public boolean isFull() {
-        return getAvailableSpace() <= 0;
+        return getAvailableSpace() <= 0 || getAvailableWeight() <= 0;
     }
 
     public boolean evaluateStop(Elevator elevator, int floor) {
