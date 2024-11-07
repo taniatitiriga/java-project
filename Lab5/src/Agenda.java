@@ -5,6 +5,9 @@ import java.util.Queue;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.stream.DoubleStream;
+
+import static java.lang.Long.sum;
 
 public class Agenda {
     private Elevator elevator;
@@ -43,20 +46,21 @@ public class Agenda {
         }
         return null;
     }
-
+    public boolean isFull() {
+        return getAvailableSpace() <= 0 || getAvailableWeight() <= 0;
+    }
 
     public void boardPassengers(Elevator elevator, int floor) {
         //nobody to board
         Queue<Person> floorQueue = queuesByFloor.get(floor);
         if (floorQueue == null || floorQueue.isEmpty()) return;
 
-        while (!floorQueue.isEmpty() && !elevator.isFull()) {
+        while (!floorQueue.isEmpty() && !isFull()) {
             Person person = floorQueue.peek();
 
-            //TO IMPLEMENT: weight and surface check
-            int personWeight = person instanceof Patient ? ((Patient) person).getTotalWeight() : person.getWeight();
+            int personWeight = person.getWeight();
 
-            if (elevator.getAvailableSpace() >= personWeight) {
+            if (getAvailableSpace() >= personWeight) {
                 queueInside.add(floorQueue.poll());
             } else {
                 break;
@@ -110,23 +114,20 @@ public class Agenda {
         }
     }
 
-    public int getAvailableSpace() {
-        int usedSpace = queueInside.stream()
-                .mapToInt(person -> (int) Math.ceil(person.getSurface()))
+    public double getAvailableSpace() {
+        double usedSpace = queueInside.stream()
+                .mapToDouble(person -> person.getSurface())
                 .sum();
-        return Math.max(0, elevator.getSurface() - usedSpace);
+        return elevator.getSurface() - usedSpace;
     }
 
-    public int getAvailableWeight() {
-        int usedWeight = queueInside.stream()
-                .mapToInt(person -> (int) Math.ceil(person.getWeight()))
+    public double getAvailableWeight() {
+        double usedWeight = queueInside.stream()
+                .mapToInt(person -> person.getWeight())
                 .sum();
         return Math.max(0, elevator.getMaxWeight() - usedWeight);
     }
 
-    public boolean isFull() {
-        return getAvailableSpace() <= 0 || getAvailableWeight() <= 0;
-    }
 
     public boolean evaluateStop(Elevator elevator, int floor) {
         Queue<Person> floorQueue = queuesByFloor.get(floor);

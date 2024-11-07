@@ -10,7 +10,7 @@ public class Elevator implements Surface{
     private int[] floors;
     private int currentFloor;
 
-    public Elevator(int maxWeight, int width, int depth, int floors[], int currentFloor) {
+    public Elevator(String ID, int maxWeight, int width, int depth, int floors[], int currentFloor) {
         this.ID = IDGenerator.generateElevatorID();
         this.maxWeight = maxWeight;
         this.width = width;

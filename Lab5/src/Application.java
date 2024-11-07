@@ -8,7 +8,7 @@ public class Application {
     private Elevator elevator;
 
     public Application() {
-        agenda = new Agenda(new LinkedList<>(), new HashMap<>());
+        agenda = new Agenda(elevator, new LinkedList<>(), new HashMap<>());
     }
 
     public void addElevator(int maxWeight, int width, int depth, int[] floors, int currentFloor) {

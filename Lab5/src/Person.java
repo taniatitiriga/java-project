@@ -8,7 +8,7 @@ public abstract class Person implements Surface {
     private int height;
     private int destinationFloor;
 
-    public Person(int weight, int height) {
+    public Person(String ID,int weight, int height) {
         this.ID = null;
         this.weight = weight;
         this.height = height;
@@ -29,6 +29,6 @@ public abstract class Person implements Surface {
     }
 
     public abstract int getPriorityLevel();
-    public abstract int getWeight();
+    public int getWeight(){ return this.weight; };
 
 }
