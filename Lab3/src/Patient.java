@@ -1,10 +1,14 @@
 public class Patient extends Person{
 
+    private static final double WHEELCHAIR_SURFACE = 1.0;// in m^2, including extra space
+    private static final double FRAME_EXTRA_SURFACE = 0.3;
+
     private boolean hasWalkingAid;
     private WalkingAid walkingAid = WalkingAid.None;
 
     public Patient(int weight, int height) {
         super(IDGenerator.generatePatientID(), weight, height);
+        this.hasWalkingAid = false;
     }
 
     @Override
@@ -31,6 +35,37 @@ public class Patient extends Person{
                 walkingAidWeight = 0;
                 break;
         }
-        return getWeight() + walkingAidWeight;
+        return super.getWeight() + walkingAidWeight;
+    }
+
+    @Override
+    public double getSurface() {
+        // default person surface
+        double bsa = super.getSurface();
+
+        switch (walkingAid) {
+            case Wheelchair:
+                //wheelchair standard size
+                return WHEELCHAIR_SURFACE;
+
+            case Frame:
+                //add frame standard size to the variable person size
+                return bsa + FRAME_EXTRA_SURFACE;
+
+            //no extra space required
+            case Crutches:
+            case None:
+                return bsa;
+        }
+        return bsa;
+    }
+
+    public void setWalkingAid(WalkingAid aid) {
+        this.walkingAid = aid;
+        this.hasWalkingAid = aid != WalkingAid.None;
+    }
+
+    public WalkingAid getWalkingAid() {
+        return walkingAid;
     }
 }

@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Agenda {
+    private Elevator elevator;
     private Queue<Person> queueInside;
     private Map<Integer, Queue<Person>> queuesByFloor;
 
-    public Agenda(Queue<Person> queueInside, Map<Integer, Queue<Person>> queuesByFloor) {
+    public Agenda(Elevator elevator, Queue<Person> queueInside, Map<Integer, Queue<Person>> queuesByFloor) {
+        this.elevator = elevator;
         this.queueInside = queueInside;
         this.queuesByFloor = queuesByFloor;
     }
