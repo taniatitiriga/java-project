@@ -1,12 +1,9 @@
-public class InputDevice {
-    public static int getIntInput(String prompt) {
-        OutputDevice.print(prompt);
-        return (int) (Math.random() * 100); // Mock random value for testing
-    }
+import java.util.Scanner;
 
-    public static String getStringInput(String prompt) {
-        OutputDevice.print(prompt);
-        String[] options = {"Patient", "Visitor", "Nurse", "Doctor"};
-        return options[(int) (Math.random() * options.length)]; // Random type for testing
+public class InputDevice {
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static String getInput() {
+        return scanner.nextLine();
     }
 }
