@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 
-public class Elevator implements Surface{
+public class Elevator implements Surface, Weight{
     private String ID;
 
     private int maxWeight;
@@ -23,7 +23,7 @@ public class Elevator implements Surface{
         return width * depth;
     }
 
-    public double getMaxWeight() {
+    public int getWeight() {
         return maxWeight;
     }
 

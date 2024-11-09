@@ -1,4 +1,4 @@
-public abstract class Person implements Surface {
+public abstract class Person implements Surface, Weight {
 
     // 20% extra space for breathing room
     private static final double BSA_BUFFER_FACTOR = 1.2;
@@ -30,5 +30,4 @@ public abstract class Person implements Surface {
 
     public abstract int getPriorityLevel();
     public int getWeight(){ return this.weight; };
-
 }

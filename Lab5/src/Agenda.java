@@ -161,7 +161,7 @@ public class Agenda {
         double usedWeight = queueInside.stream()
                 .mapToInt(person -> person.getWeight())
                 .sum();
-        return Math.max(0, elevator.getMaxWeight() - usedWeight);
+        return Math.max(0, elevator.getWeight() - usedWeight);
     }
 
 
