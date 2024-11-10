@@ -4,45 +4,38 @@ public class Main {
     public static void main(String[] args) {
         Application app = new Application();
         Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            OutputDevice.print("\n=== Main Menu ===");
-            OutputDevice.print("Select an option:");
-            OutputDevice.print("[1] Run demo");
-            OutputDevice.print("[2] Load existing elevator");
-            OutputDevice.print("[3] Create new elevator");
-            OutputDevice.print("[4] Exit");
-            OutputDevice.print("Enter your choice:");
-
-            String option = InputDevice.getInput().trim();
+        if (args.length == 1) {
+            String option = args[0].toLowerCase();
 
             switch (option) {
-                case "1":
+                case "demo":
                     runDemo(app);
                     break;
-                case "2":
+                case "load":
                     OutputDevice.print("[INFO] 'Load' option is not available yet.");
                     break;
-                case "3":
+                case "new":
                     OutputDevice.print("[INFO] 'New elevator' option is not available yet.");
                     break;
-                case "4":
+                case "exit":
                     OutputDevice.print("[INFO] Exiting the application. Goodbye!");
                     scanner.close();
                     return;
                 default:
-                    OutputDevice.print("[ERROR] Invalid option. Please select 1, 2, 3, or 4.");
+                    OutputDevice.print("[ERROR] Invalid option. Try one of the following options:\n- demo: Run an instant demo\n- load: Load elevator from memory\n- new: New elevator");
                     break;
             }
+        } else {
+            OutputDevice.print("[ERROR] No option selected. Try one of the following options:\n- demo: Run an instant demo\n- load: Load elevator from memory\n- new: New elevator");
         }
     }
 
     private static void runDemo(Application app) {
         OutputDevice.print("\n=== Demo Mode ===");
         OutputDevice.print("Available commands:");
-        OutputDevice.print(" - addElevator maxWeight width depth currentFloor");
-        OutputDevice.print(" - addPerson type weight height startFloor destinationFloor [extra]");
-        OutputDevice.print(" - startSession");
+        OutputDevice.print(" - Add Elevator: elevator maximum_weight width depth current_floor");
+        OutputDevice.print(" - Add Person: person type weight height current_floor destination_floor [extra: emergency level for staff or walking aid for patients]");
+        OutputDevice.print(" - Start Session: start");
         OutputDevice.print("Enter a command (or type 'exit' to quit demo mode):");
 
         while (true) {
@@ -57,7 +50,7 @@ public class Main {
             String command = inputParts[0];
 
             switch (command) {
-                case "addElevator":
+                case "elevator":
                     if (inputParts.length >= 5) {
                         try {
                             int maxWeight = Integer.parseInt(inputParts[1]);
@@ -67,14 +60,14 @@ public class Main {
                             int[] floors = {0, 1, 2, 3, 4, 5, 6, 7};  // Example floors
                             app.addElevator(maxWeight, width, depth, floors, currentFloor);
                         } catch (NumberFormatException e) {
-                            OutputDevice.print("[ERROR] Invalid number format. Ensure maxWeight, width, depth, and currentFloor are integers.");
+                            OutputDevice.print("[ERROR] Invalid number format. Ensure maximum weight, width, depth, and current floor are integers.");
                         }
                     } else {
-                        OutputDevice.print("[USAGE] addElevator maxWeight width depth currentFloor");
+                        OutputDevice.print("[USAGE] elevator maximum_weight width depth current_floor");
                     }
                     break;
 
-                case "addPerson":
+                case "person":
                     if (inputParts.length >= 6) {
                         String type = inputParts[1];
                         try {
@@ -88,19 +81,19 @@ public class Main {
                                 app.addPersonToQueue(person, startFloor, destinationFloor);
                             }
                         } catch (NumberFormatException e) {
-                            OutputDevice.print("[ERROR] Invalid number format. Please check that weight, height, startFloor, and destinationFloor are integers.");
+                            OutputDevice.print("[ERROR] Invalid number format. Please check that weight, height, current floor, and destination floor are integers.");
                         }
                     } else {
-                        OutputDevice.print("[USAGE] addPerson type weight height startFloor destinationFloor [extra]");
+                        OutputDevice.print("[USAGE] person type weight height current_floor destination_floor [extra: emergency level for staff or walking aid for patients]");
                     }
                     break;
 
-                case "startSession":
+                case "start":
                     app.startSession();
                     break;
 
                 default:
-                    OutputDevice.print("[ERROR] Unknown command: '" + command + "'. Type 'addElevator', 'addPerson', or 'startSession'.");
+                    OutputDevice.print("[ERROR] Unknown command: '" + command + "'. Try 'elevator', 'person', and 'start'.");
                     break;
             }
         }
@@ -108,24 +101,25 @@ public class Main {
 
     private static Person createPerson(String type, int weight, int height, String[] inputParts) {
         try {
+            type.toLowerCase();
             switch (type) {
-                case "Visitor":
+                case "visitor":
                     return new Visitor(weight, height);
-                case "Patient":
+                case "patient":
                     Patient patient = new Patient(weight, height);
                     if (inputParts.length >= 7) {
                         String walkingAid = inputParts[6];
                         patient.setWalkingAid(WalkingAid.valueOf(walkingAid));
                     }
                     return patient;
-                case "Nurse":
+                case "nurse":
                     Nurse nurse = new Nurse(weight, height);
                     if (inputParts.length >= 7) {
                         int emergencyLevel = Integer.parseInt(inputParts[6]);
                         nurse.setEmergencyLevel(emergencyLevel);
                     }
                     return nurse;
-                case "Doctor":
+                case "doctor":
                     Doctor doctor = new Doctor(weight, height);
                     if (inputParts.length >= 7) {
                         int emergencyLevel = Integer.parseInt(inputParts[6]);
@@ -133,7 +127,7 @@ public class Main {
                     }
                     return doctor;
                 default:
-                    OutputDevice.print("[ERROR] Invalid person type. Use 'Visitor', 'Patient', 'Nurse', or 'Doctor'.");
+                    OutputDevice.print("[ERROR] Invalid person type. Use 'visitor', 'patient', 'nurse', or 'doctor'.");
                     return null;
             }
         } catch (IllegalArgumentException e) {

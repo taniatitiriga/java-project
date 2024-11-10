@@ -47,7 +47,7 @@ public class Agenda {
         return null;
     }
     public boolean isFull() {
-        return getAvailableSpace() <= 0 || getAvailableWeight() <= 0;
+        return getAvailableSpace() <= 0.5 || getAvailableWeight() <= 80;
     }
 
     public void boardPassengers(Elevator elevator) {
@@ -113,7 +113,7 @@ public class Agenda {
         if (topPriorityPerson == null) {
             return elevator.getCurrentFloor();
         }else {
-            if (topPriorityPerson.getPriorityLevel() >= 6) {
+            if (topPriorityPerson.getPriorityLevel() >= 6 || isFull()) {
                 return destination;
             } else {
                 return getNextIntermediateStop(elevator.getCurrentFloor(), destination);
